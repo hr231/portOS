@@ -1,12 +1,15 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { bootLines } from "../../data/bootLines";
 import { skills } from "../../data/skills";
+import { API_URL } from "../../config";
 
 export default function TerminalContent({ t, onCommand }) {
   const [lines, setLines] = useState([]);
   const [input, setInput] = useState("");
   const [bootDone, setBootDone] = useState(false);
+  const [loading, setLoading] = useState(false);
   const bottomRef = useRef(null);
+  const inputRef = useRef(null);
 
   // Boot sequence animation
   useEffect(() => {
@@ -28,22 +31,72 @@ export default function TerminalContent({ t, onCommand }) {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [lines]);
 
-  const handleKey = (e) => {
-    if (e.key !== "Enter" || !input.trim()) return;
-    const cmd = input.trim().toLowerCase();
-    setLines((prev) => [...prev, `harshit@os:~$ ${input}`]);
+  // Focus input after loading completes
+  useEffect(() => {
+    if (!loading && bootDone) {
+      inputRef.current?.focus();
+    }
+  }, [loading, bootDone]);
 
-    const cmds = {
-      help: "Commands: about, projects, experience, blog, contact, skills, theme, clear",
+  // Ask the AI agent via the backend
+  const askAgent = useCallback(async (question) => {
+    setLoading(true);
+    setLines((prev) => [...prev, { text: "[querying knowledge graph...]", type: "loading" }]);
+
+    try {
+      const res = await fetch(`${API_URL}/api/chat`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query: question }),
+      });
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.detail || `HTTP ${res.status}`);
+      }
+
+      const data = await res.json();
+
+      // Remove the loading line and add the answer
+      setLines((prev) => {
+        const filtered = prev.filter((l) =>
+          typeof l === "string" || l.type !== "loading"
+        );
+        return [...filtered, { text: data.answer, type: "ai" }];
+      });
+    } catch (err) {
+      setLines((prev) => {
+        const filtered = prev.filter((l) =>
+          typeof l === "string" || l.type !== "loading"
+        );
+        return [
+          ...filtered,
+          { text: `[agent error: ${err.message}]`, type: "error" },
+        ];
+      });
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const handleKey = (e) => {
+    if (e.key !== "Enter" || !input.trim() || loading) return;
+    const raw = input.trim();
+    const cmd = raw.toLowerCase();
+    setLines((prev) => [...prev, `harshit@os:~$ ${raw}`]);
+
+    // Built-in commands
+    const builtins = {
+      help: "Commands: about, projects, experience, blog, contact, skills, theme, clear\n  Or just type a question to ask the AI agent.",
       skills: Object.entries(skills)
         .map(([k, v]) => `  ${k}: ${v.join(", ")}`)
         .join("\n"),
       clear: null,
     };
 
-    if (cmds[cmd] !== undefined) {
+    if (builtins[cmd] !== undefined) {
       if (cmd === "clear") setLines([]);
-      else setLines((prev) => [...prev, cmds[cmd]]);
+      else setLines((prev) => [...prev, builtins[cmd]]);
     } else if (
       ["about", "projects", "experience", "blog", "contact"].includes(cmd)
     ) {
@@ -53,12 +106,66 @@ export default function TerminalContent({ t, onCommand }) {
       onCommand("__theme");
       setLines((prev) => [...prev, "Theme toggled."]);
     } else {
-      setLines((prev) => [
-        ...prev,
-        `command not found: ${cmd}. Type 'help'`,
-      ]);
+      // Everything else goes to the AI agent
+      const question = cmd.startsWith("ask ")
+        ? raw.slice(4).trim()
+        : raw;
+      askAgent(question);
     }
     setInput("");
+  };
+
+  // Render a single line (string or object)
+  const renderLine = (l, i) => {
+    // Simple string lines (boot, commands, etc.)
+    if (typeof l === "string") {
+      const line = l || "";
+      let color = "#aaa";
+      if (line.startsWith("[OK]")) color = t.terminal;
+      else if (line.startsWith("harshit@")) color = "#00bfff";
+      else if (line.startsWith("command not found")) color = "#ff6b6b";
+      else if (line.startsWith("Commands:") || line.startsWith("  ")) color = "#ccc";
+      return (
+        <div key={i} style={{ color, whiteSpace: "pre-wrap" }}>
+          {line || "\u00A0"}
+        </div>
+      );
+    }
+
+    // Typed line objects (AI response, loading, error)
+    if (l.type === "loading") {
+      return (
+        <div key={i} style={{ color: t.accent, whiteSpace: "pre-wrap" }}>
+          <LoadingDots text={l.text} />
+        </div>
+      );
+    }
+    if (l.type === "ai") {
+      return (
+        <div
+          key={i}
+          style={{
+            color: t.terminal,
+            whiteSpace: "pre-wrap",
+            padding: "4px 0",
+            borderLeft: `2px solid ${t.terminal}`,
+            paddingLeft: 8,
+            marginTop: 2,
+            marginBottom: 2,
+          }}
+        >
+          {l.text}
+        </div>
+      );
+    }
+    if (l.type === "error") {
+      return (
+        <div key={i} style={{ color: "#ff6b6b", whiteSpace: "pre-wrap" }}>
+          {l.text}
+        </div>
+      );
+    }
+    return null;
   };
 
   return (
@@ -73,29 +180,21 @@ export default function TerminalContent({ t, onCommand }) {
         lineHeight: 1.6,
       }}
     >
-      {lines.map((l, i) => {
-        const line = l || "";
-        let color = "#aaa";
-        if (line.startsWith("[OK]")) color = t.terminal;
-        else if (line.startsWith("harshit@")) color = "#00bfff";
-        else if (line.startsWith("command not found")) color = "#ff6b6b";
-        return (
-          <div key={i} style={{ color, whiteSpace: "pre-wrap" }}>
-            {line || "\u00A0"}
-          </div>
-        );
-      })}
+      {lines.map(renderLine)}
       {bootDone && (
         <div style={{ display: "flex", alignItems: "center" }}>
           <span style={{ color: "#00bfff" }}>harshit@os:~$&nbsp;</span>
           <input
+            ref={inputRef}
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKey}
+            disabled={loading}
+            placeholder={loading ? "waiting for agent..." : ""}
             style={{
               background: "transparent",
               border: "none",
-              color: "#e0e0e0",
+              color: loading ? "#666" : "#e0e0e0",
               fontFamily: "monospace",
               fontSize: 12,
               outline: "none",
@@ -108,4 +207,18 @@ export default function TerminalContent({ t, onCommand }) {
       <div ref={bottomRef} />
     </div>
   );
+}
+
+// Animated dots for the loading indicator
+function LoadingDots({ text }) {
+  const [dots, setDots] = useState("");
+
+  useEffect(() => {
+    const iv = setInterval(() => {
+      setDots((prev) => (prev.length >= 3 ? "" : prev + "."));
+    }, 400);
+    return () => clearInterval(iv);
+  }, []);
+
+  return <span>{text}{dots}</span>;
 }

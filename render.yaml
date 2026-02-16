@@ -1,0 +1,15 @@
+# Render Blueprint — deploy the FastAPI + LightRAG backend
+# https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: harshitos-agent
+    runtime: python
+    plan: free
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: GROQ_API_KEY
+        sync: false  # Set manually in Render dashboard
+      - key: PYTHON_VERSION
+        value: "3.11"
