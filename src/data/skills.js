@@ -1,0 +1,43 @@
+export const skills = {
+  Languages: ["Python", "C++", "SQL", "Shell Scripting", "JavaScript"],
+  "AI / ML / DL": [
+    "Scikit-learn",
+    "XGBoost",
+    "TensorFlow",
+    "PyTorch",
+    "Hugging Face",
+    "SHAP",
+    "Model Training & Fine-Tuning",
+  ],
+  "LLM & Gen AI": [
+    "OpenAI API",
+    "LangChain",
+    "LangGraph",
+    "vLLM",
+    "RAG Pipelines",
+    "Agentic Frameworks",
+    "Tool-Calling",
+  ],
+  "Vector Databases": [
+    "ChromaDB",
+    "Pinecone",
+    "PGVector",
+    "Neo4j",
+    "Hybrid Search (BM25 + Vector)",
+  ],
+  "Pipelines & MLOps": [
+    "Apache Airflow",
+    "FastAPI",
+    "Docker",
+    "Kubernetes",
+    "CI/CD (Azure, GitHub)",
+    "Model Monitoring",
+  ],
+  "Cloud & Infra": [
+    "GCP (GKE, Cloud SQL)",
+    "AWS S3",
+    "Snowflake",
+    "PostgreSQL",
+    "Azure Databricks",
+  ],
+};
