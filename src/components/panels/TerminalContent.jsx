@@ -16,7 +16,8 @@ export default function TerminalContent({ t, onCommand }) {
     let i = 0;
     const iv = setInterval(() => {
       if (i < bootLines.length) {
-        setLines((prev) => [...prev, bootLines[i]]);
+        const idx = i; // capture current value before React defers the updater
+        setLines((prev) => [...prev, bootLines[idx]]);
         i++;
       } else {
         clearInterval(iv);
@@ -60,14 +61,14 @@ export default function TerminalContent({ t, onCommand }) {
       // Remove the loading line and add the answer
       setLines((prev) => {
         const filtered = prev.filter((l) =>
-          typeof l === "string" || l.type !== "loading"
+          l == null || typeof l === "string" || l.type !== "loading"
         );
         return [...filtered, { text: data.answer, type: "ai" }];
       });
     } catch (err) {
       setLines((prev) => {
         const filtered = prev.filter((l) =>
-          typeof l === "string" || l.type !== "loading"
+          l == null || typeof l === "string" || l.type !== "loading"
         );
         return [
           ...filtered,
@@ -117,6 +118,9 @@ export default function TerminalContent({ t, onCommand }) {
 
   // Render a single line (string or object)
   const renderLine = (l, i) => {
+    // Guard against undefined/null entries
+    if (l == null) return null;
+
     // Simple string lines (boot, commands, etc.)
     if (typeof l === "string") {
       const line = l || "";
@@ -180,6 +184,12 @@ export default function TerminalContent({ t, onCommand }) {
         lineHeight: 1.6,
       }}
     >
+      {/* Show a blinking cursor while boot sequence hasn't started yet */}
+      {lines.length === 0 && !bootDone && (
+        <div style={{ color: t.terminal }}>
+          <span style={{ animation: "blink 1s step-end infinite" }}>▌</span>
+        </div>
+      )}
       {lines.map(renderLine)}
       {bootDone && (
         <div style={{ display: "flex", alignItems: "center" }}>

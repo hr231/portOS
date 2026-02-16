@@ -31,21 +31,33 @@ load_dotenv(PROJECT_ROOT / ".env")
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
 RAG_STORAGE_DIR = PROJECT_ROOT / "rag_storage"
+CONTENT_DIR = PROJECT_ROOT / "content"
 
 # ------------------------------------------------------------------
-# Global LightRAG instance (loaded on startup)
+# Global state
 # ------------------------------------------------------------------
 rag_instance = None
+portfolio_context = ""  # loaded from content/ at startup
+
+
+def load_portfolio_context() -> str:
+    """Read all .md files from content/ to use as context for the LLM."""
+    texts = []
+    if CONTENT_DIR.exists():
+        for md_file in sorted(CONTENT_DIR.rglob("*.md")):
+            text = md_file.read_text(encoding="utf-8").strip()
+            if text:
+                texts.append(text)
+    return "\n\n---\n\n".join(texts)
 
 
 def create_rag():
     """Create and return a LightRAG instance pointing at the pre-built graph."""
     import numpy as np
     from lightrag import LightRAG
-    from lightrag.llm.openai import openai_complete, openai_embed
+    from lightrag.llm.openai import openai_complete
     from lightrag.utils import EmbeddingFunc
 
-    # Groq is OpenAI-compatible — use openai_complete with Groq's base URL
     groq_complete = partial(
         openai_complete,
         api_key=GROQ_API_KEY,
@@ -83,17 +95,31 @@ def create_rag():
 # ------------------------------------------------------------------
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Load LightRAG graph on startup."""
-    global rag_instance
+    """Load portfolio context and LightRAG graph on startup."""
+    global rag_instance, portfolio_context
+
+    # Always load raw content for context-injection fallback
+    portfolio_context = load_portfolio_context()
+    if portfolio_context:
+        print(f"Portfolio context loaded ({len(portfolio_context)} chars)")
+    else:
+        print("WARNING: No .md files found in content/")
+
     if not GROQ_API_KEY:
         print("WARNING: GROQ_API_KEY not set — /api/chat will return errors")
+
     if RAG_STORAGE_DIR.exists():
         print(f"Loading knowledge graph from {RAG_STORAGE_DIR} ...")
-        rag_instance = create_rag()
-        await rag_instance.initialize_storages()
-        print("Knowledge graph loaded ✓")
+        try:
+            rag_instance = create_rag()
+            await rag_instance.initialize_storages()
+            print("Knowledge graph loaded ✓")
+        except Exception as e:
+            print(f"WARNING: Failed to load knowledge graph: {e}")
+            rag_instance = None
     else:
         print(f"WARNING: {RAG_STORAGE_DIR} not found — run scripts/index.py first")
+
     yield
     rag_instance = None
 
@@ -133,31 +159,37 @@ class ChatResponse(BaseModel):
 
 
 # ------------------------------------------------------------------
-# Fallback: direct Groq call when knowledge graph is not available
+# Context-aware Groq chat (primary method)
 # ------------------------------------------------------------------
-FALLBACK_SYSTEM_PROMPT = """You are Harshit B.'s portfolio AI assistant on his retro OS-themed website.
-Answer questions about Harshit based on what you know. Be concise, friendly, and technical.
+SYSTEM_PROMPT_TEMPLATE = """You are Harshit B.'s portfolio AI assistant on his retro OS-themed website called HarshitOS.
+Answer questions about Harshit based on the provided context. Be concise, friendly, and technical.
 If you don't know something, say so honestly. Keep answers under 150 words.
-Harshit is an AI Engineer Intern at Staples Inc., previously ML Engineer at Pixeltechnologies
-and Data Analyst at GROWITUP. He's pursuing MS Data Analytics at Northeastern (3.9 GPA).
-He builds production ML systems with LangGraph, FastAPI, vLLM, Kubernetes, and RAG pipelines."""
+Use the context below to provide accurate, specific answers.
+
+--- PORTFOLIO CONTEXT ---
+{context}
+--- END CONTEXT ---"""
 
 
-async def fallback_groq_chat(query: str) -> str:
-    """Direct Groq API call when LightRAG graph is unavailable."""
+async def context_groq_chat(query: str) -> str:
+    """Groq API call with portfolio content injected as context."""
     from groq import Groq
+
+    # Truncate context to ~6000 chars to stay within token limits
+    ctx = portfolio_context[:6000] if portfolio_context else "No portfolio content available."
+    system_prompt = SYSTEM_PROMPT_TEMPLATE.format(context=ctx)
 
     client = Groq(api_key=GROQ_API_KEY)
     response = client.chat.completions.create(
         model="llama-3.3-70b-versatile",
         messages=[
-            {"role": "system", "content": FALLBACK_SYSTEM_PROMPT},
+            {"role": "system", "content": system_prompt},
             {"role": "user", "content": query},
         ],
         max_tokens=300,
         temperature=0.7,
     )
-    return response.choices[0].message.content
+    return response.choices[0].message.content or "I couldn't generate a response."
 
 
 # ------------------------------------------------------------------
@@ -169,6 +201,7 @@ async def health():
         "status": "ok",
         "graph_loaded": rag_instance is not None,
         "storage_exists": RAG_STORAGE_DIR.exists(),
+        "context_loaded": bool(portfolio_context),
     }
 
 
@@ -181,25 +214,35 @@ async def chat(req: ChatRequest):
     if not query:
         raise HTTPException(status_code=400, detail="Query cannot be empty")
 
-    try:
-        if rag_instance is not None:
-            # Use LightRAG knowledge graph (hybrid mode = graph + vector)
-            from lightrag import QueryParam
-            answer = await rag_instance.aquery(
-                query,
-                param=QueryParam(mode="hybrid"),
-            )
-        else:
-            # Fallback to direct Groq when graph not available
-            answer = await fallback_groq_chat(query)
+    # Strategy:
+    # 1. Try LightRAG naive mode (no structured output needed)
+    # 2. If that fails or returns empty, use context-injected Groq chat
+    answer = None
 
-        return ChatResponse(answer=answer)
-
-    except Exception as e:
-        print(f"Chat error: {e}")
-        # Try fallback on any LightRAG error
+    if rag_instance is not None:
         try:
-            answer = await fallback_groq_chat(query)
-            return ChatResponse(answer=answer)
-        except Exception as fallback_err:
-            raise HTTPException(status_code=500, detail=str(fallback_err))
+            from lightrag import QueryParam
+            result = await rag_instance.aquery(
+                query,
+                param=QueryParam(mode="naive"),
+            )
+            # Only accept meaningful responses (reject empty, no-context, or very short)
+            if (result
+                    and isinstance(result, str)
+                    and len(result.strip()) > 20
+                    and "no-context" not in result.lower()
+                    and "no context" not in result.lower()
+                    and "not able to provide" not in result.lower()):
+                answer = result.strip()
+        except Exception as e:
+            print(f"LightRAG query failed (falling back to context chat): {e}")
+
+    # Fallback: direct Groq with portfolio context
+    if not answer:
+        try:
+            answer = await context_groq_chat(query)
+        except Exception as e:
+            print(f"Context chat error: {e}")
+            raise HTTPException(status_code=500, detail=f"Failed to generate response: {e}")
+
+    return ChatResponse(answer=answer)

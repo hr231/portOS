@@ -1,113 +1,127 @@
-import { useState } from "react";
-
-const contactInfo = [
-  { icon: "✉️", val: "brahmbhatt.h@northeastern.edu" },
-  { icon: "📞", val: "857-565-4643" },
-  { icon: "📍", val: "Boston, MA" },
-  { icon: "🔗", val: "linkedin.com/in/harshitb1611" },
-];
-
 export default function ContactContent({ t }) {
-  const [sent, setSent] = useState(false);
-
-  const inputStyle = {
-    padding: "8px 10px",
-    background: t.input,
-    border: `1px solid ${t.borderDark}`,
-    color: t.text,
-    fontFamily: "'Segoe UI', Tahoma, sans-serif",
-    fontSize: 13,
-    outline: "none",
-    width: "100%",
-    boxSizing: "border-box",
-    borderRadius: 2,
-  };
+  const links = [
+    {
+      icon: "✉️",
+      label: "Email",
+      val: "brahmbhatt.h@northeastern.edu",
+      href: "mailto:brahmbhatt.h@northeastern.edu",
+    },
+    {
+      icon: "📞",
+      label: "Phone",
+      val: "857-565-4643",
+      href: "tel:+18575654643",
+    },
+    {
+      icon: "🔗",
+      label: "LinkedIn",
+      val: "linkedin.com/in/harshitb1611",
+      href: "https://linkedin.com/in/harshitb1611",
+    },
+    {
+      icon: "🐙",
+      label: "GitHub",
+      val: "github.com/harshitb",
+      href: "https://github.com/harshitb",
+    },
+    {
+      icon: "📍",
+      label: "Location",
+      val: "Boston, MA",
+      href: null,
+    },
+  ];
 
   return (
-    <div style={{ fontFamily: "'Segoe UI', Tahoma, sans-serif", color: t.text }}>
-      {/* Contact cards */}
+    <div
+      style={{
+        fontFamily: "'Segoe UI', Tahoma, sans-serif",
+        color: t.text,
+      }}
+    >
       <div
         style={{
           display: "flex",
           flexDirection: "column",
           gap: 8,
-          marginBottom: 20,
         }}
       >
-        {contactInfo.map((c, i) => (
-          <div
-            key={i}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 10,
-              padding: "8px 12px",
-              background: t.surfaceLight,
-              borderRadius: 4,
-              border: `1px solid ${t.border}`,
-            }}
-          >
-            <span style={{ fontSize: 16 }}>{c.icon}</span>
-            <span
+        {links.map((c, i) => {
+          const inner = (
+            <div
               style={{
-                fontSize: 13,
-                color: t.accent,
-                fontFamily: "monospace",
-                wordBreak: "break-all",
+                display: "flex",
+                alignItems: "center",
+                gap: 10,
+                padding: "10px 14px",
+                background: t.surfaceLight,
+                borderRadius: 4,
+                border: `1px solid ${t.border}`,
+                transition: "border-color 0.15s",
+                cursor: c.href ? "pointer" : "default",
               }}
             >
-              {c.val}
-            </span>
-          </div>
-        ))}
+              <span style={{ fontSize: 18 }}>{c.icon}</span>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div
+                  style={{
+                    fontSize: 11,
+                    color: t.muted,
+                    marginBottom: 2,
+                    fontWeight: 600,
+                  }}
+                >
+                  {c.label}
+                </div>
+                <span
+                  style={{
+                    fontSize: 13,
+                    color: c.href ? t.accent : t.text,
+                    fontFamily: "monospace",
+                    wordBreak: "break-all",
+                  }}
+                >
+                  {c.val}
+                </span>
+              </div>
+              {c.href && (
+                <span style={{ fontSize: 12, color: t.muted }}>↗</span>
+              )}
+            </div>
+          );
+
+          if (c.href) {
+            return (
+              <a
+                key={i}
+                href={c.href}
+                target={c.href.startsWith("http") ? "_blank" : undefined}
+                rel="noopener noreferrer"
+                style={{ textDecoration: "none" }}
+              >
+                {inner}
+              </a>
+            );
+          }
+          return <div key={i}>{inner}</div>;
+        })}
       </div>
 
-      {/* Message form */}
-      {!sent ? (
-        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          <input placeholder="Your name" style={inputStyle} />
-          <input placeholder="Email" style={inputStyle} />
-          <textarea
-            placeholder="Message..."
-            rows={3}
-            style={{ ...inputStyle, resize: "vertical" }}
-          />
-          <button
-            onClick={() => setSent(true)}
-            style={{
-              padding: "8px 16px",
-              background: t.titleBar,
-              color: t.titleBarText,
-              border: "none",
-              borderRadius: 2,
-              fontFamily: "'Segoe UI', Tahoma, sans-serif",
-              fontWeight: 700,
-              fontSize: 13,
-              cursor: "pointer",
-              alignSelf: "flex-start",
-              boxShadow: `1px 1px 0 ${t.borderDark}, inset 1px 1px 0 ${t.border}`,
-            }}
-          >
-            Send Message
-          </button>
-        </div>
-      ) : (
-        <div
-          style={{
-            padding: 14,
-            background: t.surfaceLight,
-            borderRadius: 4,
-            border: `1px solid ${t.tag}40`,
-          }}
-        >
-          <span style={{ color: t.terminal, fontWeight: 700 }}>
-            ✓ Message sent.
-          </span>
-          <div style={{ fontSize: 12, color: t.muted, marginTop: 4 }}>
-            Harshit will respond within 24h.
-          </div>
-        </div>
-      )}
+      {/* Terminal-style hint */}
+      <div
+        style={{
+          marginTop: 16,
+          padding: "8px 14px",
+          background: t.terminalBg,
+          borderRadius: 4,
+          border: `1px solid ${t.borderDark}`,
+          fontFamily: "monospace",
+          fontSize: 11,
+          color: t.terminal,
+        }}
+      >
+        $ echo "Preferred contact: email or LinkedIn"
+      </div>
     </div>
   );
 }

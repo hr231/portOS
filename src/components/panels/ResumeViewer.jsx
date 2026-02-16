@@ -2,7 +2,6 @@ import { useState, useRef, useCallback } from "react";
 
 export default function ResumeViewer({ t }) {
   const [zoom, setZoom] = useState(100);
-  const [page] = useState(1);
   const paperRef = useRef(null);
 
   // ── Print: opens a new window with the resume paper and triggers print ──
@@ -143,23 +142,6 @@ export default function ResumeViewer({ t }) {
         >
           💾 Save
         </button>
-      </div>
-
-      {/* Page status */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          gap: 8,
-          marginBottom: 6,
-        }}
-      >
-        <span style={{ fontSize: 10, color: t.muted }}>Page {page} of 1</span>
-        <span style={{ fontSize: 10, color: t.muted }}>|</span>
-        <span style={{ fontSize: 10, color: t.muted }}>
-          Harshit_B_Resume.pdf
-        </span>
       </div>
 
       {/* Paper */}
@@ -412,21 +394,6 @@ export default function ResumeViewer({ t }) {
             Azure Databricks
           </div>
 
-          {/* Footer watermark */}
-          <div
-            style={{
-              marginTop: 20,
-              textAlign: "center",
-              fontSize: 9,
-              color: "#bbb",
-              fontFamily: "'Courier New', monospace",
-              borderTop: "1px solid #ddd",
-              paddingTop: 8,
-            }}
-          >
-            Rendered in HarshitOS Document Viewer v1.0 &nbsp;·&nbsp; Page 1 of
-            1
-          </div>
         </div>
       </div>
     </div>

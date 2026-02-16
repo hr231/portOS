@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Component } from "react";
 
 import { themes } from "./data/themes";
 import { useIsMobile } from "./hooks/useIsMobile";
@@ -14,6 +14,34 @@ import BlogContent from "./components/panels/BlogContent";
 import ContactContent from "./components/panels/ContactContent";
 import TerminalContent from "./components/panels/TerminalContent";
 import ResumeViewer from "./components/panels/ResumeViewer";
+
+// Error boundary to catch and display runtime errors instead of blank screen
+class ErrorBoundary extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+  componentDidCatch(error, info) {
+    console.error("ErrorBoundary caught:", error, info);
+  }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div style={{ padding: 20, color: "#ff6b6b", fontFamily: "monospace", fontSize: 13, background: "#0a0a12", minHeight: "100vh" }}>
+          <h2 style={{ color: "#ff6b6b" }}>⚠ Runtime Error</h2>
+          <pre style={{ whiteSpace: "pre-wrap", marginTop: 10 }}>{this.state.error?.toString()}</pre>
+          <button onClick={() => this.setState({ hasError: false, error: null })} style={{ marginTop: 16, padding: "6px 16px", cursor: "pointer" }}>
+            Dismiss
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 const desktopItems = [
   { id: "about", icon: "👤", label: "About Me" },
@@ -108,6 +136,7 @@ export default function App() {
     const activeWin = zOrder.length ? zOrder[zOrder.length - 1] : null;
 
     return (
+      <ErrorBoundary>
       <div
         style={{
           width: "100vw",
@@ -227,11 +256,13 @@ export default function App() {
           ))}
         </div>
       </div>
+      </ErrorBoundary>
     );
   }
 
   // ─── DESKTOP LAYOUT ────────────────────────────────────
   return (
+    <ErrorBoundary>
     <div
       style={{
         width: "100vw",
@@ -319,6 +350,7 @@ export default function App() {
         <div style={{ display: "flex", alignItems: "center", gap: 3 }}>
           <RetroBtn
             t={t}
+            onClick={() => open("about")}
             style={{ fontWeight: 700, padding: "4px 14px", marginRight: 4 }}
           >
             ◆ HarshitOS
@@ -375,5 +407,6 @@ export default function App() {
         </div>
       </div>
     </div>
+    </ErrorBoundary>
   );
 }
