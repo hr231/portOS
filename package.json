@@ -7,8 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "backend": "cd backend && uvicorn main:app --reload --port 8000",
-    "index": "python scripts/index.py"
+    "backend": "PYTHONPATH=. uvicorn backend.main:app --reload --port 8000",
+    "ingest": "PYTHONPATH=. python3 -m pipeline.ingest",
+    "reindex": "PYTHONPATH=. python3 -m pipeline.ingest --force"
   },
   "dependencies": {
     "react": "^18.3.1",
