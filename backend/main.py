@@ -137,10 +137,11 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:5173",       # Vite dev
-        "http://localhost:3000",       # fallback
+        "http://localhost:5173",                          # Vite dev
+        "http://localhost:3000",                          # fallback
+        "https://portoai.vercel.app",                     # Vercel production
     ],
-    allow_origin_regex=r"https://.*\.vercel\.app",
+    allow_origin_regex=r"https://.*\.vercel\.app",        # all Vercel preview deploys
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
