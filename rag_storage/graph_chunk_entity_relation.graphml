@@ -1,0 +1,493 @@
+<?xml version='1.0' encoding='utf-8'?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd"><key id="d13" for="edge" attr.name="truncate" attr.type="string"/>
+<key id="d12" for="edge" attr.name="created_at" attr.type="long"/>
+<key id="d11" for="edge" attr.name="file_path" attr.type="string"/>
+<key id="d10" for="edge" attr.name="source_id" attr.type="string"/>
+<key id="d9" for="edge" attr.name="keywords" attr.type="string"/>
+<key id="d8" for="edge" attr.name="description" attr.type="string"/>
+<key id="d7" for="edge" attr.name="weight" attr.type="double"/>
+<key id="d6" for="node" attr.name="truncate" attr.type="string"/>
+<key id="d5" for="node" attr.name="created_at" attr.type="long"/>
+<key id="d4" for="node" attr.name="file_path" attr.type="string"/>
+<key id="d3" for="node" attr.name="source_id" attr.type="string"/>
+<key id="d2" for="node" attr.name="description" attr.type="string"/>
+<key id="d1" for="node" attr.name="entity_type" attr.type="string"/>
+<key id="d0" for="node" attr.name="entity_id" attr.type="string"/>
+<graph edgedefault="undirected"><node id="Harshit B.">
+  <data key="d0">Harshit B.</data>
+  <data key="d1">person</data>
+  <data key="d2">Harshit B. is an AI Engineer and ML Systems builder based in Boston, MA, with a Master of Science in Data Analytics Engineering from Northeastern University.</data>
+  <data key="d3">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d4">unknown_source</data>
+  <data key="d5">1771210916</data>
+  <data key="d6"></data>
+</node>
+<node id="Northeastern University">
+  <data key="d0">Northeastern University</data>
+  <data key="d1">organization</data>
+  <data key="d2">Northeastern University is an educational institution where Harshit B. is pursuing his Master of Science in Data Analytics Engineering.</data>
+  <data key="d3">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d4">unknown_source</data>
+  <data key="d5">1771210916</data>
+  <data key="d6"></data>
+</node>
+<node id="LDRP Institute of Technology and Research">
+  <data key="d0">LDRP Institute of Technology and Research</data>
+  <data key="d1">organization</data>
+  <data key="d2">LDRP Institute of Technology and Research is an educational institution in Gandhinagar, India, where Harshit B. earned his Bachelor of Engineering in Computer Engineering.</data>
+  <data key="d3">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d4">unknown_source</data>
+  <data key="d5">1771210916</data>
+  <data key="d6"></data>
+</node>
+<node id="Boston">
+  <data key="d0">Boston</data>
+  <data key="d1">location</data>
+  <data key="d2">Boston is the city where Harshit B. is based.</data>
+  <data key="d3">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d4">unknown_source</data>
+  <data key="d5">1771210916</data>
+  <data key="d6"></data>
+</node>
+<node id="Staples Inc.">
+  <data key="d0">Staples Inc.</data>
+  <data key="d1">organization</data>
+  <data key="d2">Staples Inc. is a company where Harshit B. worked as an AI Engineer Intern.</data>
+  <data key="d3">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d4">unknown_source</data>
+  <data key="d5">1771210916</data>
+  <data key="d6"></data>
+</node>
+<node id="Pixeltechnologies">
+  <data key="d0">Pixeltechnologies</data>
+  <data key="d1">organization</data>
+  <data key="d2">Pixeltechnologies is a company where Harshit B. worked as an ML Engineer Intern.</data>
+  <data key="d3">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d4">unknown_source</data>
+  <data key="d5">1771210916</data>
+  <data key="d6"></data>
+</node>
+<node id="GROWITUP">
+  <data key="d0">GROWITUP</data>
+  <data key="d1">organization</data>
+  <data key="d2">GROWITUP is a company where Harshit B. worked as a Data Analyst Intern.</data>
+  <data key="d3">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d4">unknown_source</data>
+  <data key="d5">1771210916</data>
+  <data key="d6"></data>
+</node>
+<node id="FrontShiftAI">
+  <data key="d0">FrontShiftAI</data>
+  <data key="d1">artifact</data>
+  <data key="d2">FrontShiftAI is a multi-tenant agentic platform developed by Harshit B.</data>
+  <data key="d3">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d4">unknown_source</data>
+  <data key="d5">1771210916</data>
+  <data key="d6"></data>
+</node>
+<node id="Credit Risk Forecasting via Temporal Architectures">
+  <data key="d0">Credit Risk Forecasting via Temporal Architectures</data>
+  <data key="d1">artifact</data>
+  <data key="d2">Credit Risk Forecasting via Temporal Architectures is a project developed by Harshit B. for credit risk forecasting.</data>
+  <data key="d3">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d4">unknown_source</data>
+  <data key="d5">1771210916</data>
+  <data key="d6"></data>
+</node>
+<node id="GEMTREK">
+  <data key="d0">GEMTREK</data>
+  <data key="d1">artifact</data>
+  <data key="d2">GEMTREK is a diamond manufacturing analytics system developed by Harshit B.</data>
+  <data key="d3">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d4">unknown_source</data>
+  <data key="d5">1771210916</data>
+  <data key="d6"></data>
+</node>
+<node id="FastAPI">
+  <data key="d0">FastAPI</data>
+  <data key="d1">artifact</data>
+  <data key="d2">FastAPI is a technology used by Harshit B. in his projects.</data>
+  <data key="d3">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d4">unknown_source</data>
+  <data key="d5">1771210916</data>
+  <data key="d6"></data>
+</node>
+<node id="Airflow">
+  <data key="d0">Airflow</data>
+  <data key="d1">artifact</data>
+  <data key="d2">Airflow is a technology used by Harshit B. in his projects.</data>
+  <data key="d3">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d4">unknown_source</data>
+  <data key="d5">1771210916</data>
+  <data key="d6"></data>
+</node>
+<node id="ChromaDB">
+  <data key="d0">ChromaDB</data>
+  <data key="d1">artifact</data>
+  <data key="d2">ChromaDB is a vector database used by Harshit B. in his projects.</data>
+  <data key="d3">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d4">unknown_source</data>
+  <data key="d5">1771210916</data>
+  <data key="d6"></data>
+</node>
+<node id="Modal">
+  <data key="d0">Modal</data>
+  <data key="d1">artifact</data>
+  <data key="d2">Modal is a technology used by Harshit B. in his projects.</data>
+  <data key="d3">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d4">unknown_source</data>
+  <data key="d5">1771210916</data>
+  <data key="d6"></data>
+</node>
+<node id="LiveKit">
+  <data key="d0">LiveKit</data>
+  <data key="d1">artifact</data>
+  <data key="d2">LiveKit is a technology used by Harshit B. in his projects.</data>
+  <data key="d3">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d4">unknown_source</data>
+  <data key="d5">1771210916</data>
+  <data key="d6"></data>
+</node>
+<node id="React">
+  <data key="d0">React</data>
+  <data key="d1">artifact</data>
+  <data key="d2">React is a technology used by Harshit B. in his projects.</data>
+  <data key="d3">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d4">unknown_source</data>
+  <data key="d5">1771210916</data>
+  <data key="d6"></data>
+</node>
+<node id="TensorFlow">
+  <data key="d0">TensorFlow</data>
+  <data key="d1">artifact</data>
+  <data key="d2">TensorFlow is a technology used by Harshit B. in his projects.</data>
+  <data key="d3">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d4">unknown_source</data>
+  <data key="d5">1771210916</data>
+  <data key="d6"></data>
+</node>
+<node id="SHAP">
+  <data key="d0">SHAP</data>
+  <data key="d1">artifact</data>
+  <data key="d2">SHAP is a technology used by Harshit B. in his projects.</data>
+  <data key="d3">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d4">unknown_source</data>
+  <data key="d5">1771210916</data>
+  <data key="d6"></data>
+</node>
+<node id="Azure">
+  <data key="d0">Azure</data>
+  <data key="d1">artifact</data>
+  <data key="d2">Azure is a cloud platform used by Harshit B. in his projects.</data>
+  <data key="d3">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d4">unknown_source</data>
+  <data key="d5">1771210916</data>
+  <data key="d6"></data>
+</node>
+<node id="SQL">
+  <data key="d0">SQL</data>
+  <data key="d1">artifact</data>
+  <data key="d2">SQL is a language used by Harshit B. in his projects.</data>
+  <data key="d3">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d4">unknown_source</data>
+  <data key="d5">1771210916</data>
+  <data key="d6"></data>
+</node>
+<node id="Python">
+  <data key="d0">Python</data>
+  <data key="d1">artifact</data>
+  <data key="d2">Python is a language used by Harshit B. in his projects.</data>
+  <data key="d3">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d4">unknown_source</data>
+  <data key="d5">1771210916</data>
+  <data key="d6"></data>
+</node>
+<node id="LDRP Institute of Technology and Research, Gandhinagar, India">
+  <data key="d0">LDRP Institute of Technology and Research, Gandhinagar, India</data>
+  <data key="d1">location</data>
+  <data key="d2">LDRP Institute of Technology and Research is located in Gandhinagar, India, and is Harshit B.'s alma mater.</data>
+  <data key="d3">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d4">unknown_source</data>
+  <data key="d5">1771210916</data>
+  <data key="d6"></data>
+</node>
+<node id="Framingham">
+  <data key="d0">Framingham</data>
+  <data key="d1">location</data>
+  <data key="d2">Framingham is a location where Harshit B. worked as an AI Engineer Intern at Staples Inc.</data>
+  <data key="d3">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d4">unknown_source</data>
+  <data key="d5">1771210916</data>
+  <data key="d6"></data>
+</node>
+<node id="Gandhinagar">
+  <data key="d0">Gandhinagar</data>
+  <data key="d1">location</data>
+  <data key="d2">Gandhinagar is a location in India where LDRP Institute of Technology and Research is situated.</data>
+  <data key="d3">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d4">unknown_source</data>
+  <data key="d5">1771210916</data>
+  <data key="d6"></data>
+</node>
+<node id="Master of Science in Data Analytics Engineering">
+  <data key="d0">Master of Science in Data Analytics Engineering</data>
+  <data key="d1">concept</data>
+  <data key="d2">Master of Science in Data Analytics Engineering is a degree program Harshit B. is pursuing at Northeastern University.</data>
+  <data key="d3">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d4">unknown_source</data>
+  <data key="d5">1771210916</data>
+  <data key="d6"></data>
+</node>
+<node id="Bachelor of Engineering in Computer Engineering">
+  <data key="d0">Bachelor of Engineering in Computer Engineering</data>
+  <data key="d1">concept</data>
+  <data key="d2">Bachelor of Engineering in Computer Engineering is a degree Harshit B. earned from LDRP Institute of Technology and Research.</data>
+  <data key="d3">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d4">unknown_source</data>
+  <data key="d5">1771210916</data>
+  <data key="d6"></data>
+</node>
+<node id="AI Engineer Intern">
+  <data key="d0">AI Engineer Intern</data>
+  <data key="d1">concept</data>
+  <data key="d2">AI Engineer Intern is a role Harshit B. held at Staples Inc.</data>
+  <data key="d3">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d4">unknown_source</data>
+  <data key="d5">1771210916</data>
+  <data key="d6"></data>
+</node>
+<node id="ML Engineer Intern">
+  <data key="d0">ML Engineer Intern</data>
+  <data key="d1">concept</data>
+  <data key="d2">ML Engineer Intern is a role Harshit B. held at Pixeltechnologies.</data>
+  <data key="d3">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d4">unknown_source</data>
+  <data key="d5">1771210916</data>
+  <data key="d6"></data>
+</node>
+<node id="Data Analyst Intern">
+  <data key="d0">Data Analyst Intern</data>
+  <data key="d1">concept</data>
+  <data key="d2">Data Analyst Intern is a role Harshit B. held at GROWITUP.</data>
+  <data key="d3">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d4">unknown_source</data>
+  <data key="d5">1771210916</data>
+  <data key="d6"></data>
+</node>
+<node id="Stanford Machine Learning">
+  <data key="d0">Stanford Machine Learning</data>
+  <data key="d1">concept</data>
+  <data key="d2">Stanford Machine Learning is a certification or course related to machine learning.</data>
+  <data key="d3">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d4">unknown_source</data>
+  <data key="d5">1771210916</data>
+  <data key="d6"></data>
+</node>
+<node id="DeepLearning.AI Generative AI">
+  <data key="d0">DeepLearning.AI Generative AI</data>
+  <data key="d1">concept</data>
+  <data key="d2">DeepLearning.AI Generative AI is a certification or course related to generative AI.</data>
+  <data key="d3">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d4">unknown_source</data>
+  <data key="d5">1771210916</data>
+  <data key="d6"></data>
+</node>
+<node id="UPenn Quantitative Modeling">
+  <data key="d0">UPenn Quantitative Modeling</data>
+  <data key="d1">concept</data>
+  <data key="d2">UPenn Quantitative Modeling is a certification or course related to quantitative modeling.</data>
+  <data key="d3">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d4">unknown_source</data>
+  <data key="d5">1771210916</data>
+  <data key="d6"></data>
+</node>
+<edge source="Harshit B." target="Northeastern University">
+  <data key="d7">1.0</data>
+  <data key="d8">Harshit B. is affiliated with Northeastern University as a student.</data>
+  <data key="d9">affiliation,education</data>
+  <data key="d10">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d11">unknown_source</data>
+  <data key="d12">1771210916</data>
+  <data key="d13"></data>
+</edge>
+<edge source="Harshit B." target="Staples Inc.">
+  <data key="d7">1.0</data>
+  <data key="d8">Harshit B. worked as an AI Engineer Intern at Staples Inc.</data>
+  <data key="d9">AI engineering,work experience</data>
+  <data key="d10">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d11">unknown_source</data>
+  <data key="d12">1771210916</data>
+  <data key="d13"></data>
+</edge>
+<edge source="Harshit B." target="Pixeltechnologies">
+  <data key="d7">1.0</data>
+  <data key="d8">Harshit B. worked as an ML Engineer Intern at Pixeltechnologies.</data>
+  <data key="d9">ML engineering,work experience</data>
+  <data key="d10">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d11">unknown_source</data>
+  <data key="d12">1771210916</data>
+  <data key="d13"></data>
+</edge>
+<edge source="Harshit B." target="GROWITUP">
+  <data key="d7">1.0</data>
+  <data key="d8">Harshit B. worked as a Data Analyst Intern at GROWITUP.</data>
+  <data key="d9">data analysis,work experience</data>
+  <data key="d10">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d11">unknown_source</data>
+  <data key="d12">1771210916</data>
+  <data key="d13"></data>
+</edge>
+<edge source="Harshit B." target="FrontShiftAI">
+  <data key="d7">1.0</data>
+  <data key="d8">Harshit B. developed the FrontShiftAI project.</data>
+  <data key="d9">AI engineering,project development</data>
+  <data key="d10">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d11">unknown_source</data>
+  <data key="d12">1771210916</data>
+  <data key="d13"></data>
+</edge>
+<edge source="Harshit B." target="Credit Risk Forecasting via Temporal Architectures">
+  <data key="d7">1.0</data>
+  <data key="d8">Harshit B. developed the Credit Risk Forecasting via Temporal Architectures project.</data>
+  <data key="d9">credit risk forecasting,project development</data>
+  <data key="d10">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d11">unknown_source</data>
+  <data key="d12">1771210916</data>
+  <data key="d13"></data>
+</edge>
+<edge source="Harshit B." target="GEMTREK">
+  <data key="d7">1.0</data>
+  <data key="d8">Harshit B. developed the GEMTREK project.</data>
+  <data key="d9">diamond manufacturing analytics,project development</data>
+  <data key="d10">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d11">unknown_source</data>
+  <data key="d12">1771210916</data>
+  <data key="d13"></data>
+</edge>
+<edge source="Harshit B." target="LDRP Institute of Technology and Research, Gandhinagar, India">
+  <data key="d7">1.0</data>
+  <data key="d8">Harshit B. is affiliated with LDRP Institute of Technology and Research as an alumnus.</data>
+  <data key="d9">affiliation,education</data>
+  <data key="d10">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d11">unknown_source</data>
+  <data key="d12">1771210916</data>
+  <data key="d13"></data>
+</edge>
+<edge source="Harshit B." target="Master of Science in Data Analytics Engineering">
+  <data key="d7">1.0</data>
+  <data key="d8">Harshit B. is pursuing a Master of Science in Data Analytics Engineering.</data>
+  <data key="d9">degree program,education</data>
+  <data key="d10">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d11">unknown_source</data>
+  <data key="d12">1771210916</data>
+  <data key="d13"></data>
+</edge>
+<edge source="Harshit B." target="Bachelor of Engineering in Computer Engineering">
+  <data key="d7">1.0</data>
+  <data key="d8">Harshit B. earned a Bachelor of Engineering in Computer Engineering.</data>
+  <data key="d9">degree,education</data>
+  <data key="d10">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d11">unknown_source</data>
+  <data key="d12">1771210916</data>
+  <data key="d13"></data>
+</edge>
+<edge source="Harshit B." target="AI Engineer Intern">
+  <data key="d7">1.0</data>
+  <data key="d8">Harshit B. worked as an AI Engineer Intern.</data>
+  <data key="d9">role,work experience</data>
+  <data key="d10">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d11">unknown_source</data>
+  <data key="d12">1771210916</data>
+  <data key="d13"></data>
+</edge>
+<edge source="Harshit B." target="ML Engineer Intern">
+  <data key="d7">1.0</data>
+  <data key="d8">Harshit B. worked as an ML Engineer Intern.</data>
+  <data key="d9">role,work experience</data>
+  <data key="d10">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d11">unknown_source</data>
+  <data key="d12">1771210916</data>
+  <data key="d13"></data>
+</edge>
+<edge source="Harshit B." target="Data Analyst Intern">
+  <data key="d7">1.0</data>
+  <data key="d8">Harshit B. worked as a Data Analyst Intern.</data>
+  <data key="d9">role,work experience</data>
+  <data key="d10">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d11">unknown_source</data>
+  <data key="d12">1771210916</data>
+  <data key="d13"></data>
+</edge>
+<edge source="Harshit B." target="Stanford Machine Learning">
+  <data key="d7">1.0</data>
+  <data key="d8">Harshit B. is certified in Stanford Machine Learning.</data>
+  <data key="d9">certification,education</data>
+  <data key="d10">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d11">unknown_source</data>
+  <data key="d12">1771210916</data>
+  <data key="d13"></data>
+</edge>
+<edge source="Harshit B." target="DeepLearning.AI Generative AI">
+  <data key="d7">1.0</data>
+  <data key="d8">Harshit B. is certified in DeepLearning.AI Generative AI.</data>
+  <data key="d9">certification,education</data>
+  <data key="d10">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d11">unknown_source</data>
+  <data key="d12">1771210916</data>
+  <data key="d13"></data>
+</edge>
+<edge source="Harshit B." target="UPenn Quantitative Modeling">
+  <data key="d7">1.0</data>
+  <data key="d8">Harshit B. is certified in UPenn Quantitative Modeling.</data>
+  <data key="d9">certification,education</data>
+  <data key="d10">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d11">unknown_source</data>
+  <data key="d12">1771210916</data>
+  <data key="d13"></data>
+</edge>
+<edge source="Staples Inc." target="Framingham">
+  <data key="d7">1.0</data>
+  <data key="d8">Staples Inc. is located in Framingham.</data>
+  <data key="d9">company,location</data>
+  <data key="d10">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d11">unknown_source</data>
+  <data key="d12">1771210916</data>
+  <data key="d13"></data>
+</edge>
+<edge source="FrontShiftAI" target="FastAPI">
+  <data key="d7">1.0</data>
+  <data key="d8">FrontShiftAI uses FastAPI as a technology.</data>
+  <data key="d9">project development,technology usage</data>
+  <data key="d10">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d11">unknown_source</data>
+  <data key="d12">1771210916</data>
+  <data key="d13"></data>
+</edge>
+<edge source="FrontShiftAI" target="Airflow">
+  <data key="d7">1.0</data>
+  <data key="d8">FrontShiftAI uses Airflow as a technology.</data>
+  <data key="d9">project development,technology usage</data>
+  <data key="d10">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d11">unknown_source</data>
+  <data key="d12">1771210916</data>
+  <data key="d13"></data>
+</edge>
+<edge source="Credit Risk Forecasting via Temporal Architectures" target="TensorFlow">
+  <data key="d7">1.0</data>
+  <data key="d8">Credit Risk Forecasting via Temporal Architectures uses TensorFlow as a technology.</data>
+  <data key="d9">project development,technology usage</data>
+  <data key="d10">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d11">unknown_source</data>
+  <data key="d12">1771210916</data>
+  <data key="d13"></data>
+</edge>
+<edge source="GEMTREK" target="SQL">
+  <data key="d7">1.0</data>
+  <data key="d8">GEMTREK uses SQL as a technology.</data>
+  <data key="d9">project development,technology usage</data>
+  <data key="d10">chunk-2591ccd2ed85a8b0b0d728c37788cbe3</data>
+  <data key="d11">unknown_source</data>
+  <data key="d12">1771210916</data>
+  <data key="d13"></data>
+</edge>
+</graph></graphml>

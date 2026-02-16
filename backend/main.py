@@ -14,6 +14,7 @@ Deploy on Render:
 
 import os
 from pathlib import Path
+from functools import partial
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException
@@ -41,8 +42,15 @@ def create_rag():
     """Create and return a LightRAG instance pointing at the pre-built graph."""
     import numpy as np
     from lightrag import LightRAG
-    from lightrag.llm.groq import groq_complete
+    from lightrag.llm.openai import openai_complete, openai_embed
     from lightrag.utils import EmbeddingFunc
+
+    # Groq is OpenAI-compatible — use openai_complete with Groq's base URL
+    groq_complete = partial(
+        openai_complete,
+        api_key=GROQ_API_KEY,
+        base_url="https://api.groq.com/openai/v1",
+    )
 
     async def local_embedding(texts: list[str]) -> np.ndarray:
         """Deterministic hash-based embedding (matches the indexer)."""
@@ -62,7 +70,6 @@ def create_rag():
         working_dir=str(RAG_STORAGE_DIR),
         llm_model_func=groq_complete,
         llm_model_name="llama-3.3-70b-versatile",
-        llm_model_kwargs={"api_key": GROQ_API_KEY},
         embedding_func=EmbeddingFunc(
             embedding_dim=256,
             max_token_size=8192,
@@ -83,6 +90,7 @@ async def lifespan(app: FastAPI):
     if RAG_STORAGE_DIR.exists():
         print(f"Loading knowledge graph from {RAG_STORAGE_DIR} ...")
         rag_instance = create_rag()
+        await rag_instance.initialize_storages()
         print("Knowledge graph loaded ✓")
     else:
         print(f"WARNING: {RAG_STORAGE_DIR} not found — run scripts/index.py first")
@@ -105,9 +113,6 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:5173",       # Vite dev
         "http://localhost:3000",       # fallback
-        "https://*.vercel.app",        # Vercel preview URLs
-        # Add your custom domain here if you have one:
-        # "https://harshit.dev",
     ],
     allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,

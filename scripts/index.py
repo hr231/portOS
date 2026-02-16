@@ -19,6 +19,7 @@ import sys
 import hashlib
 import json
 from pathlib import Path
+from functools import partial
 
 from dotenv import load_dotenv
 
@@ -70,9 +71,9 @@ def save_index_state(state: dict):
     INDEX_STATE_FILE.write_text(json.dumps(state, indent=2))
 
 
-def main():
+async def main():
     from lightrag import LightRAG, QueryParam
-    from lightrag.llm.groq import groq_complete
+    from lightrag.llm.openai import openai_complete, openai_embed
     from lightrag.utils import EmbeddingFunc
     import numpy as np
 
@@ -83,22 +84,24 @@ def main():
     RAG_STORAGE_DIR.mkdir(parents=True, exist_ok=True)
 
     # ------------------------------------------------------------------
-    # Embedding function using a simple TF-IDF-like approach via Groq
-    # LightRAG needs an embedding func; we use a lightweight local one
-    # to avoid needing a separate embedding API.
+    # Groq is OpenAI-compatible — use openai_complete with Groq's base URL
+    # ------------------------------------------------------------------
+    groq_complete = partial(
+        openai_complete,
+        api_key=GROQ_API_KEY,
+        base_url="https://api.groq.com/openai/v1",
+    )
+
+    # ------------------------------------------------------------------
+    # Embedding function — deterministic hash-based (no embedding API needed)
+    # LightRAG's graph extraction is what matters most for knowledge graphs;
+    # embeddings are secondary for graph-based retrieval.
     # ------------------------------------------------------------------
     async def local_embedding(texts: list[str]) -> np.ndarray:
-        """
-        Simple hash-based embedding fallback.
-        For production, swap this with an actual embedding model.
-        LightRAG's graph extraction is what matters most — embeddings
-        are secondary for the knowledge-graph-based retrieval.
-        """
         from lightrag.utils import compute_mdhash_id
         dim = 256
         embeddings = []
         for text in texts:
-            # Deterministic pseudo-embedding from text hash
             h = compute_mdhash_id(text, prefix="")
             seed = int(h[:8], 16)
             rng = np.random.RandomState(seed)
@@ -107,18 +110,21 @@ def main():
             embeddings.append(vec)
         return np.array(embeddings)
 
-    # Initialize LightRAG with Groq LLM backend
+    # Initialize LightRAG with Groq as the LLM backend
     rag = LightRAG(
         working_dir=str(RAG_STORAGE_DIR),
         llm_model_func=groq_complete,
         llm_model_name="llama-3.3-70b-versatile",
-        llm_model_kwargs={"api_key": GROQ_API_KEY},
         embedding_func=EmbeddingFunc(
             embedding_dim=256,
             max_token_size=8192,
             func=local_embedding,
         ),
     )
+
+    # REQUIRED: initialize async storages (new LightRAG versions)
+    await rag.initialize_storages()
+    print("LightRAG storages initialized ✓")
 
     # Collect all documents
     docs = collect_documents(CONTENT_DIR)
@@ -145,7 +151,7 @@ def main():
 
         print(f"  INDEXING: {path} ...")
         try:
-            rag.insert(doc["text"])
+            await rag.ainsert(doc["text"])
             indexed_count += 1
             print(f"    ✓ Done")
         except Exception as e:
@@ -160,4 +166,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    import asyncio
+    asyncio.run(main())
