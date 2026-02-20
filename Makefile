@@ -1,24 +1,51 @@
 # ============================================================
-#  HarshitOS Portfolio — Pipeline Commands
+#  HarshitOS — Personal Multi-Agent System
 # ============================================================
 #
-#  make dev         Start frontend + backend locally
-#  make frontend    Start Vite dev server
-#  make backend     Start FastAPI server
+#  Development:
+#    make dev              Start frontend + backend
+#    make frontend         Vite dev server
+#    make backend          FastAPI server
+#    make voice-server     LiveKit agent worker
 #
-#  make ingest      Index new/changed content into knowledge graph
-#  make reindex     Force reindex ALL content
-#  make status      Show what would be indexed (dry run)
-#  make clear       Clear index state (next ingest reindexes all)
+#  CLI:
+#    make cli              Interactive text chat
+#    make voice            Interactive voice chat (terminal mic)
+#    make ask Q="question" One-shot query
 #
-#  make build       Build frontend for production
-#  make deploy      Build → commit → push (triggers Vercel + Render)
+#  Pipeline:
+#    make ingest           Index new/changed content
+#    make reindex          Force reindex everything
+#    make status           Show what would be indexed
+#    make clear            Clear index state
 #
-#  make prompt      Edit the agent system prompt
-#  make test-agent  Send a test query to the local backend
+#  Testing:
+#    make test             Run all tests
+#    make test-core        Test core/ module only
+#    make test-agents      Test agents/ module only
+#    make test-voice       Test voice/ module only
+#    make test-pipeline    Test pipeline/ module only
+#    make test-agent-api   Curl test against running backend
+#
+#  Auth:
+#    make auth-gmail       OAuth flow for Gmail
+#    make auth-outlook     OAuth flow for Outlook
+#
+#  Build & Deploy:
+#    make build            Build frontend for production
+#    make deploy           Build + commit + push
+#    make setup            Install all dependencies
+#
 # ============================================================
 
-.PHONY: dev frontend backend ingest reindex status clear build deploy prompt test-agent setup help
+.PHONY: dev frontend backend voice-server cli voice ask \
+        ingest reindex status clear \
+        test test-core test-agents test-voice test-pipeline test-agent-api \
+        auth-gmail auth-outlook \
+        build deploy setup help
+
+PYTHON := python3
+PYTHONPATH_SET := PYTHONPATH=.
 
 # ── Development ───────────────────────────────────────────────
 
@@ -30,28 +57,72 @@ frontend: ## Start Vite dev server
 	npx vite --port 5173
 
 backend: ## Start FastAPI backend
-	PYTHONPATH=. uvicorn backend.main:app --reload --port 8000
+	$(PYTHONPATH_SET) uvicorn backend.main:app --reload --port 8000
 
-# ── Pipeline: Data Ingestion ──────────────────────────────────
+voice-server: ## Start LiveKit agent worker
+	$(PYTHONPATH_SET) $(PYTHON) -m voice.livekit_agent
 
-ingest: ## Index new/changed content into the knowledge graph
-	PYTHONPATH=. python3 -m pipeline.ingest
+# ── CLI ───────────────────────────────────────────────────────
+
+cli: ## Interactive text chat
+	$(PYTHONPATH_SET) $(PYTHON) -m cli.main chat
+
+voice: ## Interactive voice mode (terminal mic/speaker)
+	$(PYTHONPATH_SET) $(PYTHON) -m cli.main voice
+
+ask: ## One-shot query: make ask Q="What does Harshit do?"
+	$(PYTHONPATH_SET) $(PYTHON) -m cli.main ask "$(Q)"
+
+# ── Pipeline ──────────────────────────────────────────────────
+
+ingest: ## Index new/changed content
+	$(PYTHONPATH_SET) $(PYTHON) -m pipeline.ingest
 
 reindex: ## Force reindex ALL documents
-	PYTHONPATH=. python3 -m pipeline.ingest --force
+	$(PYTHONPATH_SET) $(PYTHON) -m pipeline.ingest --force
 
 status: ## Show what would be indexed (dry run)
-	PYTHONPATH=. python3 -m pipeline.ingest --status
+	$(PYTHONPATH_SET) $(PYTHON) -m pipeline.ingest --status
 
-clear: ## Clear index state (next ingest reindexes everything)
-	PYTHONPATH=. python3 -m pipeline.ingest --clear
+clear: ## Clear index state
+	$(PYTHONPATH_SET) $(PYTHON) -m pipeline.ingest --clear
+
+# ── Testing ───────────────────────────────────────────────────
+
+test: ## Run all tests
+	$(PYTHONPATH_SET) $(PYTHON) -m pytest tests/ -v
+
+test-core: ## Test core/ module
+	$(PYTHONPATH_SET) $(PYTHON) -m pytest tests/test_core.py -v
+
+test-agents: ## Test agents/ module
+	$(PYTHONPATH_SET) $(PYTHON) -m pytest tests/test_agents.py -v
+
+test-voice: ## Test voice/ module
+	$(PYTHONPATH_SET) $(PYTHON) -m pytest tests/test_voice.py -v
+
+test-pipeline: ## Test pipeline/ module
+	$(PYTHONPATH_SET) $(PYTHON) -m pytest tests/test_pipeline.py -v
+
+test-agent-api: ## Curl test against running backend
+	@curl -s -X POST http://localhost:8000/api/chat \
+		-H "Content-Type: application/json" \
+		-d '{"query": "What does Harshit do?"}' | $(PYTHON) -m json.tool
+
+# ── Auth ──────────────────────────────────────────────────────
+
+auth-gmail: ## Run Gmail OAuth flow
+	$(PYTHONPATH_SET) $(PYTHON) -m cli.main auth gmail
+
+auth-outlook: ## Run Outlook OAuth flow
+	$(PYTHONPATH_SET) $(PYTHON) -m cli.main auth outlook
 
 # ── Build & Deploy ────────────────────────────────────────────
 
 build: ## Build frontend for production
 	npm run build
 
-deploy: build ## Build, commit, and push (triggers Vercel + Render)
+deploy: build ## Build, commit, push (triggers Vercel + Render)
 	@echo ""
 	@echo "Deploying to production..."
 	git add -A
@@ -61,40 +132,27 @@ deploy: build ## Build, commit, and push (triggers Vercel + Render)
 		git commit -m "deploy: $$(date '+%Y-%m-%d %H:%M')"; \
 		git push; \
 		echo ""; \
-		echo "✓ Pushed to GitHub — Vercel + Render will auto-deploy."; \
+		echo "Pushed — Vercel + Render will auto-deploy."; \
 	fi
-
-# ── Pipeline: Prompt Engineering ──────────────────────────────
-
-prompt: ## Open the agent system prompt for editing
-	@echo "System prompt: pipeline/prompts/system.md"
-	@echo "Extraction prompt: pipeline/prompts/extraction.md"
-	@echo "Query prompt: pipeline/prompts/query.md"
-	@echo ""
-	@echo "Edit these files, then run 'make deploy' to push changes."
-
-# ── Testing ───────────────────────────────────────────────────
-
-test-agent: ## Send a test query to the local backend
-	@curl -s -X POST http://localhost:8000/api/chat \
-		-H "Content-Type: application/json" \
-		-d '{"query": "What does Harshit do?"}' | python3 -m json.tool
 
 # ── Setup ─────────────────────────────────────────────────────
 
-setup: ## Install all dependencies (frontend + backend + pipeline)
+setup: ## Install all dependencies
 	npm install
 	pip install -r backend/requirements.txt
 	pip install -r pipeline/requirements.txt
+	pip install pytest pytest-asyncio  # test deps
+	@mkdir -p data
 	@echo ""
-	@echo "✓ Dependencies installed."
-	@echo "  → Set GROQ_API_KEY in .env.local"
-	@echo "  → Run 'make dev' to start developing"
+	@echo "Dependencies installed."
+	@echo "  Set API keys in .env.local (see .env.example)"
+	@echo "  Run 'make dev' to start developing"
+	@echo "  Run 'make test' to verify scaffold"
 
 # ── Help ──────────────────────────────────────────────────────
 
-help: ## Show this help
-	@echo "HarshitOS Portfolio Commands:"
+help: ## Show all commands
+	@echo "HarshitOS Agent System Commands:"
 	@echo ""
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
-		awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-14s\033[0m %s\n", $$1, $$2}'
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | \
+		awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-18s\033[0m %s\n", $$1, $$2}'
